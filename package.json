@@ -1,0 +1,34 @@
+{
+  "name": "markdown-preview-basic",
+  "displayName": "Markdown Preview Basic",
+  "description": "Custom-styled markdown preview, available via Open With...",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "markdownPreviewBasic.preview",
+        "displayName": "Markdown Preview (Basic)",
+        "selector": [
+          {
+            "filenamePattern": "*.md"
+          }
+        ],
+        "priority": "option"
+      }
+    ]
+  },
+  "dependencies": {
+    "markdown-it": "^14.1.0",
+    "mathjax": "^3.2.2",
+    "mermaid": "^11.16.0",
+    "shiki": "^4.4.1"
+  }
+}
