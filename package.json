@@ -20,6 +20,7 @@
   "activationEvents": [],
   "scripts": {
     "build": "npx @vscode/vsce package",
+    "watch": "node esbuild.js --watch",
     "vscode:prepublish": "node esbuild.js"
   },
   "contributes": {

@@ -211,8 +211,9 @@ class MarkdownPreviewProvider {
     color: var(--vscode-descriptionForeground);
     border-radius: 4px;
     cursor: pointer;
-    font-size: 1.4rem;
-    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   #zoom-controls button:hover { color: var(--vscode-editor-foreground); }
   #zoom-controls button:active { color: var(--vscode-descriptionForeground); }
@@ -220,8 +221,8 @@ class MarkdownPreviewProvider {
 </head>
 <body>
 <div id="zoom-controls">
-  <button id="zoom-out" title="Zoom out">-</button>
-  <button id="zoom-in" title="Zoom in">+</button>
+  <button id="zoom-out" title="Zoom out"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+  <button id="zoom-in" title="Zoom in"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><line x1="12" y1="5" x2="12" y2="19"/></svg></button>
 </div>
 <div id="content"></div>
 <script>
