@@ -1,6 +1,7 @@
 const path = require('path');
 const vscode = require('vscode');
 const MarkdownIt = require('markdown-it');
+const taskLists = require('markdown-it-task-lists');
 const { createHighlighter } = require('shiki');
 
 const COMMON_LANGS = [
@@ -31,7 +32,7 @@ function makeMarkdownIt(highlighter, shikiTheme) {
       }
       return highlighter.codeToHtml(codeStr, { lang, theme: shikiTheme });
     },
-  });
+  }).use(taskLists, { enabled: true });
 }
 
 function renderWithMath(md, source) {
@@ -50,8 +51,28 @@ function shikiThemeFor(kind) {
     : 'github-dark';
 }
 
+const TASK_LINE_RE = /^(\s*[-*+]\s+)\[([ xX])\]/;
+
+function toggleTaskInDocument(document, index, checked) {
+  let seen = 0;
+  for (let line = 0; line < document.lineCount; line++) {
+    const text = document.lineAt(line).text;
+    const match = text.match(TASK_LINE_RE);
+    if (!match) continue;
+    if (seen === index) {
+      const bracketStart = match[1].length;
+      const range = new vscode.Range(line, bracketStart, line, bracketStart + 3);
+      const edit = new vscode.WorkspaceEdit();
+      edit.replace(document.uri, range, checked ? '[x]' : '[ ]');
+      vscode.workspace.applyEdit(edit);
+      return;
+    }
+    seen++;
+  }
+}
+
 function resolveImageSrcs(html, docDir, webview) {
-  return html.replace(/(<img[^>]+src=")([^"]+)(")/g, (match, pre, src, post) => {
+  return html.replace(/(<(?:img|audio|video|source)[^>]+src=")([^"]+)(")/g, (match, pre, src, post) => {
     if (/^([a-z]+:)?\/\//i.test(src) || src.startsWith('data:')) return match;
     const uri = webview.asWebviewUri(vscode.Uri.file(path.resolve(docDir, src)));
     return pre + uri.toString() + post;
@@ -92,6 +113,7 @@ class MarkdownPreviewProvider {
     const readySub = webviewPanel.webview.onDidReceiveMessage((msg) => {
       if (msg.type === 'ready') render();
       if (msg.type === 'zoom') this.context.globalState.update('zoom', msg.value);
+      if (msg.type === 'toggleTask') toggleTaskInDocument(document, msg.index, msg.checked);
     });
     webviewPanel.onDidDispose(() => {
       changeSub.dispose();
@@ -106,7 +128,8 @@ class MarkdownPreviewProvider {
 <html>
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline' ${cspSource}; img-src ${cspSource} https: data:;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline' ${cspSource}; img-src ${cspSource} https: data:; media-src ${cspSource} https:; frame-src https:;">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <script>
   window.MathJax = {
     tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']] },
@@ -155,6 +178,9 @@ class MarkdownPreviewProvider {
   tbody tr:nth-child(even) { background: var(--vscode-textCodeBlock-background); }
   tbody tr:hover { background: var(--vscode-list-hoverBackground, var(--vscode-textCodeBlock-background)); }
   a { color: var(--vscode-textLink-foreground); }
+  .task-list-item { list-style: none; margin-left: -1.4em; }
+  .task-list-item-checkbox { margin-right: 0.5em; }
+  .task-list-item label { cursor: pointer; }
   #zoom-controls {
     position: fixed;
     top: 0.5rem;
@@ -247,6 +273,18 @@ class MarkdownPreviewProvider {
           });
         });
         pre.prepend(button);
+      });
+
+      content.querySelectorAll('.task-list-item-checkbox').forEach((checkbox, index) => {
+        const label = document.createElement('label');
+        checkbox.replaceWith(label);
+        label.appendChild(checkbox);
+        while (label.nextSibling && label.nextSibling.nodeName !== 'UL' && label.nextSibling.nodeName !== 'OL') {
+          label.appendChild(label.nextSibling);
+        }
+        checkbox.addEventListener('change', () => {
+          vscode.postMessage({ type: 'toggleTask', index, checked: checkbox.checked });
+        });
       });
     }
   });

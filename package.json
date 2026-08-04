@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "markdown-it": "^14.1.0",
+    "markdown-it-task-lists": "^2.1.1",
     "mathjax": "^3.2.2",
     "mermaid": "^11.16.0",
     "shiki": "^4.4.1"
