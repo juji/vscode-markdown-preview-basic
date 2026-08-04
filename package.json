@@ -2,10 +2,14 @@
   "name": "markdown-preview-basic",
   "displayName": "Markdown Preview Basic",
   "description": "Custom-styled markdown preview, available via Open With...",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "publisher": "juji",
   "license": "MIT",
   "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juji/vscode-markdown-preview-basic.git"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -15,6 +19,7 @@
   "main": "./dist/extension.js",
   "activationEvents": [],
   "scripts": {
+    "build": "npx @vscode/vsce package",
     "vscode:prepublish": "node esbuild.js"
   },
   "contributes": {
