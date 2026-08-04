@@ -23,7 +23,11 @@ async function ensureLangsLoaded(highlighter, source) {
     const lang = match[1].toLowerCase();
     if (lang !== 'mermaid' && !loaded.has(lang)) wanted.add(lang);
   }
-  await Promise.all([...wanted].map((lang) => highlighter.loadLanguage(lang).catch(() => {})));
+  await Promise.all([...wanted].map(async (lang) => {
+    try {
+      await highlighter.loadLanguage(lang);
+    } catch {}
+  }));
 }
 
 function makeMarkdownIt(highlighter, shikiTheme) {
@@ -150,13 +154,18 @@ class MarkdownPreviewProvider {
     font-family: var(--vscode-font-family, sans-serif);
     color: var(--vscode-editor-foreground);
     background: var(--vscode-editor-background);
-    max-width: 860px;
+    line-height: 1.6;
+  }
+  #content {
+    max-width: 650px;
     margin: 0 auto;
     padding: 2rem;
-    line-height: 1.6;
-    font-size: calc(1rem * var(--zoom));
+    zoom: var(--zoom);
   }
   h1, h2, h3 { border-bottom: 1px solid var(--vscode-panel-border); padding-bottom: 0.3em; }
+  ul, ol { padding-left: 1.6em; margin: 0.8em 0; }
+  ul ul, ul ol, ol ul, ol ol { margin: 0.25em 0; }
+  li { margin: 0.5em 0; }
   code { background: var(--vscode-textCodeBlock-background); padding: 0.15em 0.4em; border-radius: 4px; }
   pre code { display: block; padding: 1em; overflow-x: auto; }
   pre.shiki { position: relative; padding: 1em; overflow-x: auto; border-radius: 8px; font-size: 0.85em; }

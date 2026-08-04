@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "watch",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "esbuild",
+        "pattern": {
+          "regexp": "^\\[esbuild\\] build failed: (.*)$",
+          "message": 1
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^watching for changes\\.\\.\\.$",
+          "endsPattern": "^\\[esbuild\\] rebuilt at .*$"
+        }
+      },
+      "presentation": {
+        "reveal": "never"
+      }
+    }
+  ]
+}
