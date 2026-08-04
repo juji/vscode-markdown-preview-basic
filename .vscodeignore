@@ -1,0 +1,10 @@
+.vscode/**
+.gitignore
+esbuild.js
+extension.js
+samples/**
+node_modules/**
+!node_modules/mermaid/dist/mermaid.min.js
+!node_modules/mathjax/es5/tex-svg.js
+**/*.map
+**/.DS_Store

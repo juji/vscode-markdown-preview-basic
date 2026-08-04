@@ -13,6 +13,13 @@ A custom-styled markdown preview for VS Code, available via **Open With... → M
 - GitHub-style tables (sticky header, zebra striping, horizontal scroll on overflow)
 - Interactive task lists — checking a box edits the underlying `- [ ]`/`- [x]` in the markdown source (undo-able like any other edit)
 
+## Installation
+
+```bash
+npx @vscode/vsce package
+code --install-extension markdown-preview-basic-0.0.1.vsix
+```
+
 ## Development
 
 ```bash
