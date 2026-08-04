@@ -4,6 +4,8 @@
 
 A custom-styled markdown preview for VS Code, available via **Open With... → Markdown Preview (Basic)** — sits alongside the built-in preview rather than replacing it.
 
+Available on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=juji.vscode-markdown-preview-basic).
+
 ## Features
 
 - Custom, theme-aware rendering (uses VS Code's own `--vscode-*` CSS variables, matches your active color theme)
@@ -20,7 +22,7 @@ A custom-styled markdown preview for VS Code, available via **Open With... → M
 ```bash
 npm install
 npm run build
-code --install-extension markdown-preview-basic-0.0.3.vsix --force
+code --install-extension vscode-markdown-preview-basic-0.0.3.vsix --force
 ```
 
 ## Development
