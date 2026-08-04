@@ -1,5 +1,7 @@
 # Markdown Preview Basic
 
+![Markdown Preview Basic screenshot](./screenshot.png)
+
 A custom-styled markdown preview for VS Code, available via **Open With... → Markdown Preview (Basic)** — sits alongside the built-in preview rather than replacing it.
 
 ## Features

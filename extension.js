@@ -4,22 +4,26 @@ const MarkdownIt = require('markdown-it');
 const taskLists = require('markdown-it-task-lists');
 const { createHighlighter } = require('shiki');
 
-const COMMON_LANGS = [
-  'javascript', 'typescript', 'jsx', 'tsx', 'json', 'html', 'css', 'scss',
-  'markdown', 'bash', 'shell', 'python', 'rust', 'go', 'java', 'c', 'cpp',
-  'csharp', 'ruby', 'php', 'sql', 'yaml', 'toml', 'xml', 'dockerfile',
-  'diff', 'graphql', 'vue', 'svelte',
-];
-
 let highlighterPromise = null;
 function getHighlighter() {
   if (!highlighterPromise) {
     highlighterPromise = createHighlighter({
       themes: ['github-dark', 'github-light'],
-      langs: COMMON_LANGS,
+      langs: [],
     });
   }
   return highlighterPromise;
+}
+
+const FENCE_LANG_RE = /^ {0,3}(?:`{3,}|~{3,})\s*([\w-]+)/gm;
+async function ensureLangsLoaded(highlighter, source) {
+  const loaded = new Set(highlighter.getLoadedLanguages());
+  const wanted = new Set();
+  for (const match of source.matchAll(FENCE_LANG_RE)) {
+    const lang = match[1].toLowerCase();
+    if (lang !== 'mermaid' && !loaded.has(lang)) wanted.add(lang);
+  }
+  await Promise.all([...wanted].map((lang) => highlighter.loadLanguage(lang).catch(() => {})));
 }
 
 function makeMarkdownIt(highlighter, shikiTheme) {
@@ -100,9 +104,11 @@ class MarkdownPreviewProvider {
 
     const render = async () => {
       const highlighter = await getHighlighter();
+      const source = document.getText();
+      await ensureLangsLoaded(highlighter, source);
       const shikiTheme = shikiThemeFor(vscode.window.activeColorTheme.kind);
       const md = makeMarkdownIt(highlighter, shikiTheme);
-      const html = resolveImageSrcs(renderWithMath(md, document.getText()), docDir, webviewPanel.webview);
+      const html = resolveImageSrcs(renderWithMath(md, source), docDir, webviewPanel.webview);
       webviewPanel.webview.postMessage({ type: 'update', body: html });
     };
 
