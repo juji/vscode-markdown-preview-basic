@@ -166,7 +166,7 @@ class MarkdownPreviewProvider {
   ul, ol { padding-left: 1.6em; margin: 0.8em 0; }
   ul ul, ul ol, ol ul, ol ol { margin: 0.25em 0; }
   li { margin: 0.5em 0; }
-  code { background: var(--vscode-textCodeBlock-background); padding: 0.15em 0.4em; border-radius: 4px; }
+  code { background: color-mix(in srgb, var(--vscode-textCodeBlock-background), white 15%); padding: 0.15em 0.4em; border-radius: 4px; font-family: var(--vscode-editor-font-family, monospace); font-size: 0.9em; }
   pre code { display: block; padding: 1em; overflow-x: auto; }
   pre.shiki { position: relative; padding: 1em; overflow-x: auto; border-radius: 8px; font-size: 0.85em; }
   pre.shiki code { background: none; padding: 0; }
