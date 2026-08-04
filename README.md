@@ -16,8 +16,9 @@ A custom-styled markdown preview for VS Code, available via **Open With... → M
 ## Installation
 
 ```bash
-npx @vscode/vsce package
-code --install-extension markdown-preview-basic-0.0.1.vsix
+npm install
+npm run build
+code --install-extension markdown-preview-basic-0.0.3.vsix --force
 ```
 
 ## Development
