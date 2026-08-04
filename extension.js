@@ -183,24 +183,33 @@ class MarkdownPreviewProvider {
   .task-list-item label { cursor: pointer; }
   #zoom-controls {
     position: fixed;
-    top: 0.5rem;
-    right: 0.5rem;
+    top: 0;
+    right: 0;
     display: flex;
     gap: 0.25rem;
     z-index: 1;
+    padding: 0.25rem;
+    border-radius: 0 0 0 8px;
+    border: 1px solid var(--vscode-panel-border);
+    border-top: none;
+    border-right: none;
+    background: color-mix(in srgb, var(--vscode-editor-background) 55%, transparent);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
   }
   #zoom-controls button {
     width: 2.4rem;
     height: 2.4rem;
-    border: 1px solid var(--vscode-panel-border);
-    background: var(--vscode-editor-background);
-    color: var(--vscode-editor-foreground);
+    border: none;
+    background: transparent;
+    color: var(--vscode-descriptionForeground);
     border-radius: 4px;
     cursor: pointer;
     font-size: 1.4rem;
     line-height: 1;
   }
-  #zoom-controls button:hover { background: var(--vscode-toolbar-hoverBackground, var(--vscode-panel-border)); }
+  #zoom-controls button:hover { color: var(--vscode-editor-foreground); }
+  #zoom-controls button:active { color: var(--vscode-descriptionForeground); }
 </style>
 </head>
 <body>
