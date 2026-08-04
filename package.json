@@ -1,6 +1,6 @@
 {
   "name": "vscode-markdown-preview-basic",
-  "displayName": "Markdown Preview Basic",
+  "displayName": "Markdown Preview (Basic)",
   "description": "Custom-styled markdown preview, available via Open With...",
   "version": "0.0.3",
   "publisher": "juji",
